@@ -15,7 +15,7 @@
              {% for category, message in messages %}
                  <div class="alert alert-{{ category }} alert-dismissible fade show">
                      {{ message }}
-                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                     <button type="button" class="btn-close" data-bs-dismiss="alert">btn-close</button>
                  </div>
              {% endfor %}
          </div>
@@ -30,7 +30,7 @@
         <div class="form signup">
             <div class="form-content">
                 <header>Create an Account</header>
-                <form action="{{ url_for('main.signup') }}" method="POST">
+                <form action="{{ url_for('main.signup') }}" method="post">
                     <div class="field input-field">
                         <input type="email" name="email" placeholder="Email" class="input" required>
                     </div>
