@@ -1,84 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="utf-8">
-    <title>Model Metrics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مقاييس النموذج - نظام الموافقة على القروض</title>
+
+    <!-- تحسين تضمين المكتبات -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/metrics.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/metrics.css') }}">
 </head>
 <body>
-    {% include 'header.html' %}  
-    <div class="content-wrapper">
+    {% include 'header.html' %}
+
+    <main class="content-wrapper py-4"> <!-- إضافة وسم main -->
         <div class="container">
-            <h1 class="text-center my-4">Model Evaluation Metrics</h1>
-            
-            <div class="container mt-5">                
-                <div class="row">
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-primary h-100 metric-card">
+            <h1 class="text-center my-4">مقاييس تقييم النموذج</h1>
+
+            <div class="container mt-5">
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3">
+                        <article class="card text-white bg-primary h-100 metric-card"> <!-- استخدام وسم article -->
                             <div class="card-body text-center">
-                                <h5 class="card-title">Accuracy</h5>
+                                <h2 class="h5 card-title">الدقة</h2> <!-- تحسين التسلسل الهرمي للعناوين -->
                                 <p class="display-4">{{ accuracy }}</p>
-                                <p class="small">(Cross-validated average)</p>
+                                <p class="small">(متوسط التحقق المتقاطع)</p>
                             </div>
-                        </div>
+                        </article>
                     </div>
-                    
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-success h-100 metric-card">
+
+                    <div class="col-md-6 col-lg-3">
+                        <article class="card text-white bg-success h-100 metric-card">
                             <div class="card-body text-center">
-                                <h5 class="card-title">Precision</h5>
+                                <h2 class="h5 card-title">الدقة التنبؤية</h2>
                                 <p class="display-4">{{ precision }}</p>
-                                <p class="small">For class "Approved"</p>
+                                <p class="small">للحالة "تمت الموافقة"</p>
                             </div>
-                        </div>
+                        </article>
                     </div>
-                    
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-info h-100 metric-card">
+
+                    <div class="col-md-6 col-lg-3">
+                        <article class="card text-white bg-info h-100 metric-card">
                             <div class="card-body text-center">
-                                <h5 class="card-title">Recall</h5>
+                                <h2 class="h5 card-title">الاستدعاء</h2>
                                 <p class="display-4">{{ recall }}</p>
-                                <p class="small">Sensitivity/True Positive Rate</p>
+                                <p class="small">حساسية النموذج</p>
                             </div>
-                        </div>
+                        </article>
                     </div>
-                    
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-warning h-100 metric-card">
+
+                    <div class="col-md-6 col-lg-3">
+                        <article class="card text-white bg-warning h-100 metric-card">
                             <div class="card-body text-center">
-                                <h5 class="card-title">F1 Score</h5>
+                                <h2 class="h5 card-title">مقياس F1</h2>
                                 <p class="display-4">{{ f1 }}</p>
-                                <p class="small">Harmonic mean</p>
+                                <p class="small">متوسط توافقي</p>
                             </div>
-                        </div>
+                        </article>
                     </div>
                 </div>
-                <div class="card mt-4">
+
+                <section class="card mt-4"> <!-- إضافة وسم section -->
                     <div class="card-header">
-                        <h4>About These Metrics</h4>
+                        <h2 class="h4">حول هذه المقاييس</h2> <!-- تحسين التسلسل الهرمي -->
                     </div>
                     <div class="card-body">
-                        <p>These metrics are calculated using 10-fold stratified cross-validation, exactly as computed in "The Model.ipynb" notebook.</p>
+                        <p>تم حساب هذه المقاييس باستخدام التحقق المتقاطع الطبقي 10-fold، تمامًا كما تم حسابها في ملف "The Model.ipynb".</p>
                         <ul>
-                            <li><strong>Accuracy</strong>: {{ (accuracy*100)|int }}% of predictions were correct</li>
-                            <li><strong>Precision</strong>: When predicting "Approved", {{ (precision*100)|int }}% were actually approved</li>
-                            <li><strong>Recall</strong>: The model identified {{ (recall*100)|int }}% of all actual approved loans</li>
-                            <li><strong>F1 Score</strong>: Balanced measure combining precision and recall</li>
+                            <li><strong>الدقة</strong>: {{ (accuracy*100)|int }}% من التوقعات كانت صحيحة</li>
+                            <li><strong>الدقة التنبؤية</strong>: عندما تنبأ النموذج بـ "تمت الموافقة"، كانت {{ (precision*100)|int }}% منها موافقًا عليها فعليًا</li>
+                            <li><strong>الاستدعاء</strong>: استطاع النموذج التعرف على {{ (recall*100)|int }}% من جميع القروض التي تمت الموافقة عليها فعليًا</li>
+                            <li><strong>مقياس F1</strong>: مقياس متوازن يجمع بين الدقة التنبؤية والاستدعاء</li>
                         </ul>
                     </div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="metricsChart"></canvas>
-                </div>
+                </section>
+
+                <section class="chart-container mt-5"> <!-- إضافة وسم section -->
+                    <h2 class="h4 text-center mb-4">مقارنة مقاييس النموذج</h2> <!-- عنوان للرسم البياني -->
+                    <div class="bg-white p-3 rounded shadow-sm">
+                        <canvas
+                            id="metricsChart"
+                            aria-label="مقارنة مقاييس أداء النموذج"
+                            role="img"> <!-- تحسين إمكانية الوصول -->
+                            <p>مقاييس النموذج: الدقة ({{ accuracy }}), الدقة التنبؤية ({{ precision }}), الاستدعاء ({{ recall }}), مقياس F1 ({{ f1 }})</p>
+                        </canvas>
+                    </div>
+                </section>
             </div>
         </div>
-    </div>
+    </main>
 
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container text-center">
-            <p class="mb-0">© 2025 Bank Loan Approval System. All rights reserved.</p>
+            <p class="mb-0">© 2025 نظام الموافقة على القروض البنكية. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 
@@ -89,15 +103,15 @@
             recall: {{ recall | tojson }},
             f1: {{ f1 | tojson }}
         };
-        
+
         const ctx = document.getElementById('metricsChart').getContext('2d');
-        
+
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Accuracy', 'Precision', 'Recall', 'F1 Score'],
+                labels: ['الدقة', 'الدقة التنبؤية', 'الاستدعاء', 'مقياس F1'],
                 datasets: [{
-                    label: 'Score',
+                    label: 'القيمة',
                     data: [
                         metricsData.accuracy,
                         metricsData.precision,
@@ -127,7 +141,7 @@
                         max: 1,
                         title: {
                             display: true,
-                            text: 'Score (0-1)'
+                            text: 'القيمة (0-1)'
                         }
                     }
                 },

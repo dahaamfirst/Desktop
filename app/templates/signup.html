@@ -1,61 +1,294 @@
-<!-- templates/signup.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>signup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب - نظام الموافقة على القروض</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --light-bg: #f8f9fa;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .signup-card {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: none;
+            overflow: hidden;
+        }
+
+        .signup-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .signup-body {
+            padding: 2rem;
+            background-color: white;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--secondary-color);
+        }
+
+        .btn-signup {
+            background: var(--primary-color);
+            border: none;
+            padding: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-signup:hover {
+            background: #0b5ed7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+        }
+
+        .bank-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .password-strength {
+            height: 5px;
+            margin-top: 5px;
+            border-radius: 3px;
+            transition: width 0.3s, background 0.3s;
+        }
+
+        .strength-0 { width: 20%; background: #dc3545; }
+        .strength-1 { width: 40%; background: #ffc107; }
+        .strength-2 { width: 60%; background: #ffc107; }
+        .strength-3 { width: 80%; background: #198754; }
+        .strength-4 { width: 100%; background: #198754; }
+
+        .terms-text {
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-     <!-- Flash messages -->
-     {% with messages = get_flashed_messages(with_categories=true) %}
-     {% if messages %}
-         <div class="container mt-3">
-             {% for category, message in messages %}
-                 <div class="alert alert-{{ category }} alert-dismissible fade show">
-                     {{ message }}
-                     <button type="button" class="btn-close" data-bs-dismiss="alert">btn-close</button>
-                 </div>
-             {% endfor %}
-         </div>
-     {% endif %}
- {% endwith %}
-    <div class="container mt-4 text-center">
-        <h1 class="welcome">Welcome</h1>
-        <img src="{{ url_for('static', filename='images/bank.jpg') }}" width="200" alt="bank" class="rounded mx-auto d-block">
-    </div>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <!-- رسائل التنبيه -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="mb-4">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show d-flex align-items-center">
+                                    <i class="bi bi-{% if category == 'success' %}check-circle{% else %}exclamation-circle{% endif %}-fill me-2"></i>
+                                    <div>{{ message }}</div>
+                                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="إغلاق"></button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
 
-    <section class="container forms show-signup">
-        <div class="form signup">
-            <div class="form-content">
-                <header>Create an Account</header>
-                <form action="{{ url_for('main.signup') }}" method="post">
-                    <div class="field input-field">
-                        <input type="email" name="email" placeholder="Email" class="input" required>
+                <div class="signup-card">
+                    <div class="signup-header">
+                        <img src="{{ url_for('static', filename='images/bank.jpg') }}"
+                             alt="شعار البنك"
+                             class="bank-logo rounded-circle mb-3">
+                        <h1 class="h3 mb-0">مرحبًا بك في نظامنا</h1>
+                        <p class="mb-0 opacity-75">أنشئ حسابك للبدء في إدارة طلبات القروض</p>
                     </div>
 
-                    <div class="field input-field">
-                        <input type="password" name="password" placeholder="Create password" class="password" required>
-                    </div>
+                    <div class="signup-body">
+                        <form action="{{ url_for('main.signup') }}" method="post" class="needs-validation" novalidate>
+                            <div class="mb-4">
+                                <label for="email" class="form-label fw-medium">البريد الإلكتروني</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-envelope"></i>
+                                    </span>
+                                    <input type="email"
+                                           class="form-control py-2"
+                                           id="email"
+                                           name="email"
+                                           placeholder="example@bank.com"
+                                           required>
+                                </div>
+                                <div class="invalid-feedback">
+                                    الرجاء إدخال بريد إلكتروني صحيح
+                                </div>
+                            </div>
 
-                    <div class="field input-field">
-                        <input type="password" name="confirm_password" placeholder="Confirm password" class="password" required>
-                        <i class='bx bx-hide eye-icon'></i>
-                    </div>
+                            <div class="mb-4 position-relative">
+                                <label for="password" class="form-label fw-medium">كلمة المرور</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock"></i>
+                                    </span>
+                                    <input type="password"
+                                           class="form-control py-2"
+                                           id="password"
+                                           name="password"
+                                           placeholder="كلمة مرور قوية"
+                                           minlength="6"
+                                           required>
+                                    <span class="password-toggle" id="togglePassword">
+                                        <i class="bi bi-eye"></i>
+                                    </span>
+                                </div>
+                                <div class="password-strength mt-2" id="passwordStrength"></div>
+                                <div class="form-text">يجب أن تحتوي كلمة المرور على 6 أحرف على الأقل</div>
+                                <div class="invalid-feedback">
+                                    الرجاء إدخال كلمة مرور صالحة
+                                </div>
+                            </div>
 
-                    <div class="field button-field">
-                        <button type="submit">Signup</button>
-                    </div>
-                </form>
+                            <div class="mb-4 position-relative">
+                                <label for="confirm_password" class="form-label fw-medium">تأكيد كلمة المرور</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-lock"></i>
+                                    </span>
+                                    <input type="password"
+                                           class="form-control py-2"
+                                           id="confirm_password"
+                                           name="confirm_password"
+                                           placeholder="أعد إدخال كلمة المرور"
+                                           required>
+                                    <span class="password-toggle" id="toggleConfirmPassword">
+                                        <i class="bi bi-eye"></i>
+                                    </span>
+                                </div>
+                                <div class="invalid-feedback" id="confirmPasswordFeedback">
+                                    كلمة المرور غير متطابقة
+                                </div>
+                            </div>
 
-                <div class="form-link text-center mt-2">
-                    <span>Already have an account? <a href="{{ url_for('main.login') }}">Login</a></span>
+                            <div class="mb-4 form-check">
+                                <input type="checkbox" class="form-check-input" id="terms" required>
+                                <label class="form-check-label terms-text" for="terms">
+                                    أوافق على <a href="#" class="text-decoration-none">الشروط والأحكام</a>
+                                    و <a href="#" class="text-decoration-none">سياسة الخصوصية</a>
+                                </label>
+                                <div class="invalid-feedback">
+                                    يجب الموافقة على الشروط والأحكام
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-signup w-100 text-white py-2">
+                                <i class="bi bi-person-plus me-2"></i>إنشاء حساب
+                            </button>
+                        </form>
+
+                        <div class="mt-4 pt-3 border-top text-center">
+                            <p class="mb-2">لديك حساب بالفعل؟</p>
+                            <a href="{{ url_for('main.login') }}" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>تسجيل الدخول
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center text-secondary">
+                    <p class="small">&copy; 2025 نظام الموافقة على القروض البنكية. جميع الحقوق محفوظة.</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <script>
+        // التحقق من صحة النموذج
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('.needs-validation');
+
+            form.addEventListener('submit', function(event) {
+                // التحقق من تطابق كلمة المرور
+                const password = document.getElementById('password');
+                const confirmPassword = document.getElementById('confirm_password');
+                const confirmFeedback = document.getElementById('confirmPasswordFeedback');
+
+                if (password.value !== confirmPassword.value) {
+                    confirmPassword.setCustomValidity('كلمة المرور غير متطابقة');
+                    confirmFeedback.style.display = 'block';
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    confirmPassword.setCustomValidity('');
+                    confirmFeedback.style.display = 'none';
+                }
+
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            });
+
+            // إظهار/إخفاء كلمة المرور
+            function setupPasswordToggle(inputId, toggleId) {
+                const passwordInput = document.getElementById(inputId);
+                const toggleButton = document.getElementById(toggleId);
+
+                toggleButton.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+
+                    const icon = this.querySelector('i');
+                    icon.classList.toggle('bi-eye');
+                    icon.classList.toggle('bi-eye-slash');
+                });
+            }
+
+            setupPasswordToggle('password', 'togglePassword');
+            setupPasswordToggle('confirm_password', 'toggleConfirmPassword');
+
+            // مؤشر قوة كلمة المرور
+            const passwordInput = document.getElementById('password');
+            const strengthBar = document.getElementById('passwordStrength');
+
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+
+                // اختبارات القوة
+                if (password.length >= 6) strength += 1;
+                if (password.length >= 8) strength += 1;
+                if (/[A-Z]/.test(password)) strength += 1;
+                if (/[0-9]/.test(password)) strength += 1;
+                if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+
+                // تحديث شريط القوة
+                strengthBar.className = 'password-strength strength-' + Math.min(strength, 4);
+            });
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
