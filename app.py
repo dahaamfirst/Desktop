@@ -6,7 +6,13 @@ app = Flask(__name__)
 
 # تكوين قاعدة البيانات - سيتم استبدالها بمتغير البيئة
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '').replace("postgres://", "postgresql://", 1)
-
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists("app/build/" + path):
+        return send_from_directory('app/build', path)
+    else:
+        return send_from_directory('app/build', 'index.html')
 @app.route('/')
 def home():
     """الصفحة الرئيسية"""
