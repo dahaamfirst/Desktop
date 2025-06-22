@@ -1,116 +1,164 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl"> <!-- تغيير لغة الصفحة للعربية واتجاه RTL -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - Bank Request System</title>
+    <title>الصفحة الرئيسية - نظام طلبات البنك</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-
+    <style>
+        /* إضافة تخصيصات للغة العربية */
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            line-height: 1.8;
+        }
+        
+        .feature-card {
+            transition: transform 0.3s;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        /* تحسينات للجوال */
+        @media (max-width: 768px) {
+            .navbar .d-flex {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 15px;
+            }
+            
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+            
+            .card {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{{ url_for('main.home') }}">
-      <img
-        src="{{ url_for('static', filename='images/bank.jpg') }}"
-        height="50"
-        width="50"
-        alt="شعار البنك"
-        class="d-inline-block align-top rounded">
-    </a>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('main.home') }}">
+                <img
+                    src="{{ url_for('static', filename='images/bank.jpg') }}"
+                    height="50"
+                    width="50"
+                    alt="شعار البنك"
+                    class="d-inline-block align-top rounded">
+            </a>
 
-    <!-- زر التبديل - تم إصلاح مشكلة النص الوصفي -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-expanded="false"
-      aria-label="تبديل القائمة">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="تبديل القائمة">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link active" href="{{ url_for('main.home') }}">الرئيسية</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('main.manage_request') }}">إدارة الطلبات</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('main.eda') }}">التحليل الاستكشافي</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('main.metrics_page') }}">مقاييس النموذج</a>
-        </li>
-      </ul>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto"> <!-- تغيير إلى ms-auto للمحاذاة الصحيحة -->
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('main.home') }}">الرئيسية</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.manage_request') }}">إدارة الطلبات</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.eda') }}">التحليل الاستكشافي</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.metrics_page') }}">مقاييس النموذج</a>
+                    </li>
+                </ul>
 
-      {% if 'email' in session %}
-      <div class="d-flex">
-        <span class="navbar-text me-3">
-          مرحبًا، {{ session.get('email', 'مستخدم') }}
-        </span>
-        <a href="{{ url_for('main.logout') }}" class="btn btn-outline-light">
-          تسجيل الخروج
-        </a>
-      </div>
-      {% else %}
-      <div class="d-flex">
-        <a href="{{ url_for('main.login') }}" class="btn btn-outline-light me-2">
-          تسجيل الدخول
-        </a>
-        <a href="{{ url_for('main.signup') }}" class="btn btn-primary">
-          إنشاء حساب
-        </a>
-      </div>
-      {% endif %}
-    </div>
-  </div>
-</nav>
+                {% if 'email' in session %}
+                <div class="d-flex ms-3"> <!-- إضافة هامش يساري -->
+                    <span class="navbar-text me-3">
+                        مرحبًا، {{ session.get('email', 'مستخدم') }}
+                    </span>
+                    <a href="{{ url_for('main.logout') }}" class="btn btn-outline-light">
+                        تسجيل الخروج
+                    </a>
+                </div>
+                {% else %}
+                <div class="d-flex">
+                    <a href="{{ url_for('main.login') }}" class="btn btn-outline-light me-2">
+                        تسجيل الدخول
+                    </a>
+                    <a href="{{ url_for('main.signup') }}" class="btn btn-primary">
+                        إنشاء حساب
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
     <div class="container">
         <div class="hero-section text-center">
-            <h1 class="display-4 fw-bold">Bank Loan Approval System</h1>
-            <p class="lead">Streamline your loan application process with our AI-powered prediction system</p>
-            
+            <h1 class="display-4 fw-bold">نظام الموافقة على القروض البنكية</h1>
+            <p class="lead">بسّط عملية طلب القروض باستخدام نظامنا الذكي المدعوم بالذكاء الاصطناعي</p>
+            <a href="{{ url_for('main.manage_request') }}" class="btn btn-light btn-lg mt-3">ابدأ الآن</a>
         </div>
 
         <div class="welcome-message text-center mb-5">
-            <h2>Welcome to the Bank Request Approval System</h2>
-            <p class="lead">Our platform helps you manage loan applications efficiently with predictive analytics and comprehensive reporting.</p>
+            <h2>مرحبًا بك في نظام الموافقة على طلبات البنك</h2>
+            <p class="lead">منصتنا تساعدك في إدارة طلبات القروض بكفاءة باستخدام التحليلات التنبؤية والتقارير الشاملة.</p>
         </div>
 
         <div class="row g-4 mb-5">
             <div class="col-md-4">
-                <div class="card feature-card p-4">
+                <div class="card feature-card h-100 p-4"> <!-- إضافة h-100 لتوحيد الارتفاعات -->
                     <div class="card-body text-center">
                         <div class="feature-icon">📊</div>
-                        <h3>Manage Requests</h3>
-                        <p>View, process, and track all loan applications in one place with our intuitive dashboard.</p>
-                        <a href="{{ url_for('main.manage_request') }}" class="btn btn-primary mt-3">Get Started</a>
+                        <h3>إدارة الطلبات</h3>
+                        <p>عرض ومعالجة وتتبع جميع طلبات القروض في مكان واحد عبر لوحة التحكم البديهية.</p>
+                        <a href="{{ url_for('main.manage_request') }}" class="btn btn-primary w-100 mt-3">بدء الإدارة</a>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-4">
-                <div class="card feature-card p-4">
+                <div class="card feature-card h-100 p-4">
                     <div class="card-body text-center">
                         <div class="feature-icon">🔍</div>
-                        <h3>Data Analysis</h3>
-                        <p>Explore detailed analytics and visualizations of your loan application data.</p>
-                        <a href="{{ url_for('main.eda') }}" class="btn btn-primary mt-3">Explore Data</a>
+                        <h3>التحليل الاستكشافي</h3>
+                        <p>استكشف التحليلات التفصيلية والتصورات البيانية لبيانات طلبات القروض.</p>
+                        <a href="{{ url_for('main.eda') }}" class="btn btn-primary w-100 mt-3">استكشف البيانات</a>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-4">
-                <div class="card feature-card p-4">
+                <div class="card feature-card h-100 p-4">
                     <div class="card-body text-center">
                         <div class="feature-icon">📈</div>
-                        <h3>Model Metrics</h3>
-                        <p>Monitor the performance of our prediction model with comprehensive metrics.</p>
-                        <a href="{{ url_for('main.metrics_page') }}" class="btn btn-primary mt-3">View Metrics</a>
+                        <h3>مقاييس النموذج</h3>
+                        <p>راقب أداء نموذجنا التنبؤي مع المقاييس الشاملة لضمان الدقة والكفاءة.</p>
+                        <a href="{{ url_for('main.metrics_page') }}" class="btn btn-primary w-100 mt-3">عرض المقاييس</a>
                     </div>
                 </div>
             </div>
@@ -119,7 +167,7 @@
 
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container text-center">
-            <p class="mb-0">© 2025 Bank Loan Approval System. All rights reserved.</p>
+            <p class="mb-0">© 2025 نظام الموافقة على القروض البنكية. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 
