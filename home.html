@@ -50,7 +50,6 @@
       {% if 'email' in session %}
       <div class="d-flex">
         <span class="navbar-text me-3">
-          مرحبًا، {{ session.get('email', 'مستخدم') }}
         </span>
         <a href="{{ url_for('main.logout') }}" class="btn btn-outline-light">
           تسجيل الخروج
